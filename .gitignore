@@ -172,3 +172,9 @@ local
 *.sh
 
 *.env
+*.pdf
+*.doc
+*.docx
+*.html
+*.xml
+*.xlsx
