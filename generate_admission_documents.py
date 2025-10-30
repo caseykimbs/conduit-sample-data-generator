@@ -257,14 +257,8 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     ssn = generate_ssn()
     mrn = generate_mrn()
 
-    # Generate addresses and contact info
+    # Generate patient address
     patient_address = fake.address().replace("\n", ", ")
-    hospital_address = f"{fake.building_number()} {fake.street_name()}"
-    hospital_city = fake.city()
-    hospital_state = fake.state_abbr()
-    hospital_zip = fake.zipcode()
-    hospital_phone = fake.phone_number()
-    hospital_fax = fake.phone_number()
 
     # Generate insurance
     primary_ins, secondary_ins = get_insurance_type()
@@ -328,36 +322,220 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     floor = random.choice(["2A", "2B", "3A", "3B", "4A", "4B"])
     room = random.randint(201, 499)
 
-    # Realistic US-based hospital names (California and Colorado focus)
-    hospital_names = [
-        "Hoag Hospital",
-        "UCLA Medical Center",
-        "Stanford Hospital",
-        "UCSF Medical Center",
-        "Cedars-Sinai Medical Center",
-        "Scripps Memorial Hospital",
-        "Sharp Memorial Hospital",
-        "Sutter Health",
-        "Temecula Valley Hospital",
-        "Montclair Hospital Medical Center",
-        "Centinela Hospital Medical Center",
-        "Kaiser Permanente",
-        "Providence Mission Hospital",
-        "Huntington Hospital",
-        "Children's Hospital Los Angeles",
-        "UC Irvine Medical Center",
-        "Riverside Community Hospital",
-        "UC San Diego Health",
-        "Cottage Hospital",
-        "Dignity Health",
-        "UCHealth University of Colorado Hospital",
-        "Denver Health Medical Center",
-        "Presbyterian/St. Luke's Medical Center",
-        "Porter Adventist Hospital",
+    # Real Los Angeles and Orange County hospitals with accurate addresses
+    hospitals = [
+        {
+            "name": "Hoag Hospital Newport Beach",
+            "address": "1 Hoag Drive",
+            "city": "Newport Beach",
+            "state": "CA",
+            "zip": "92663",
+            "phone": "(949) 764-4624"
+        },
+        {
+            "name": "UCLA Medical Center",
+            "address": "757 Westwood Plaza",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90095",
+            "phone": "(310) 825-9111"
+        },
+        {
+            "name": "Cedars-Sinai Medical Center",
+            "address": "8700 Beverly Blvd",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90048",
+            "phone": "(310) 423-3277"
+        },
+        {
+            "name": "USC Keck Hospital",
+            "address": "1500 San Pablo St",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90033",
+            "phone": "(323) 442-8500"
+        },
+        {
+            "name": "Providence St. Joseph Hospital",
+            "address": "501 S Buena Vista St",
+            "city": "Burbank",
+            "state": "CA",
+            "zip": "91505",
+            "phone": "(818) 843-5111"
+        },
+        {
+            "name": "Huntington Hospital",
+            "address": "100 W California Blvd",
+            "city": "Pasadena",
+            "state": "CA",
+            "zip": "91105",
+            "phone": "(626) 397-5000"
+        },
+        {
+            "name": "Children's Hospital Los Angeles",
+            "address": "4650 Sunset Blvd",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90027",
+            "phone": "(323) 660-2450"
+        },
+        {
+            "name": "UC Irvine Medical Center",
+            "address": "101 The City Drive South",
+            "city": "Orange",
+            "state": "CA",
+            "zip": "92868",
+            "phone": "(714) 456-6011"
+        },
+        {
+            "name": "St. Joseph Hospital Orange",
+            "address": "1100 W Stewart Drive",
+            "city": "Orange",
+            "state": "CA",
+            "zip": "92868",
+            "phone": "(714) 633-9111"
+        },
+        {
+            "name": "Mission Hospital",
+            "address": "27700 Medical Center Rd",
+            "city": "Mission Viejo",
+            "state": "CA",
+            "zip": "92691",
+            "phone": "(949) 364-1400"
+        },
+        {
+            "name": "Saddleback Memorial Medical Center",
+            "address": "24451 Health Center Dr",
+            "city": "Laguna Hills",
+            "state": "CA",
+            "zip": "92653",
+            "phone": "(949) 837-4500"
+        },
+        {
+            "name": "Kaiser Permanente Downey Medical Center",
+            "address": "9333 Imperial Hwy",
+            "city": "Downey",
+            "state": "CA",
+            "zip": "90242",
+            "phone": "(562) 657-9000"
+        },
+        {
+            "name": "Long Beach Memorial Medical Center",
+            "address": "2801 Atlantic Ave",
+            "city": "Long Beach",
+            "state": "CA",
+            "zip": "90806",
+            "phone": "(562) 933-2000"
+        },
+        {
+            "name": "Torrance Memorial Medical Center",
+            "address": "3330 Lomita Blvd",
+            "city": "Torrance",
+            "state": "CA",
+            "zip": "90505",
+            "phone": "(310) 325-9110"
+        },
+        {
+            "name": "Providence Little Company of Mary",
+            "address": "4101 Torrance Blvd",
+            "city": "Torrance",
+            "state": "CA",
+            "zip": "90503",
+            "phone": "(310) 540-7676"
+        },
+        {
+            "name": "Anaheim Regional Medical Center",
+            "address": "1111 W La Palma Ave",
+            "city": "Anaheim",
+            "state": "CA",
+            "zip": "92801",
+            "phone": "(714) 774-1450"
+        },
+        {
+            "name": "Kaiser Permanente Anaheim Medical Center",
+            "address": "3440 E La Palma Ave",
+            "city": "Anaheim",
+            "state": "CA",
+            "zip": "92806",
+            "phone": "(714) 644-2000"
+        },
+        {
+            "name": "West Anaheim Medical Center",
+            "address": "3033 W Orange Ave",
+            "city": "Anaheim",
+            "state": "CA",
+            "zip": "92804",
+            "phone": "(714) 827-3000"
+        },
+        {
+            "name": "Providence Holy Cross Medical Center",
+            "address": "15031 Rinaldi St",
+            "city": "Mission Hills",
+            "state": "CA",
+            "zip": "91345",
+            "phone": "(818) 365-8051"
+        },
+        {
+            "name": "UCLA Santa Monica Medical Center",
+            "address": "1250 16th St",
+            "city": "Santa Monica",
+            "state": "CA",
+            "zip": "90404",
+            "phone": "(310) 319-4000"
+        },
+        {
+            "name": "Providence Saint John's Health Center",
+            "address": "2121 Santa Monica Blvd",
+            "city": "Santa Monica",
+            "state": "CA",
+            "zip": "90404",
+            "phone": "(310) 829-5511"
+        },
+        {
+            "name": "Ronald Reagan UCLA Medical Center",
+            "address": "757 Westwood Plaza",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90095",
+            "phone": "(310) 825-9111"
+        },
+        {
+            "name": "Good Samaritan Hospital",
+            "address": "1225 Wilshire Blvd",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90017",
+            "phone": "(213) 977-2121"
+        },
+        {
+            "name": "Hollywood Presbyterian Medical Center",
+            "address": "1300 N Vermont Ave",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90027",
+            "phone": "(213) 413-3000"
+        },
+        {
+            "name": "Kaiser Permanente Los Angeles Medical Center",
+            "address": "4867 Sunset Blvd",
+            "city": "Los Angeles",
+            "state": "CA",
+            "zip": "90027",
+            "phone": "(323) 783-4011"
+        }
     ]
 
-    hospital_name = random.choice(hospital_names)
-    # Extract short name for filename (first word or two before separator)
+    hospital = random.choice(hospitals)
+    hospital_name = hospital["name"]
+    hospital_address = hospital["address"]
+    hospital_city = hospital["city"]
+    hospital_state = hospital["state"]
+    hospital_zip = hospital["zip"]
+    hospital_phone = hospital["phone"]
+    hospital_fax = fake.phone_number()  # Fax numbers can still be generated
+
+    # Extract short name for filename (first word)
     hospital_short = hospital_name.split()[0]
 
     # Generate filename if not provided
