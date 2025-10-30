@@ -153,7 +153,86 @@ def get_random_allergies():
     num_allergies = random.randint(2, 4)
     return random.sample(allergies, k=num_allergies)
 
-def generate_admission_document(filename=None):
+def get_clinical_flags():
+    """Generate clinical flags based on green/yellow/red categories"""
+    flags = {"green": [], "yellow": [], "red": []}
+
+    green_flags = [
+        ("Hemodialysis", "MWF schedule at dialysis center"),
+        ("IV Therapy", "Peripheral line, saline lock"),
+        ("PICC Line", "Right arm PICC, placed {}, flushes per protocol"),
+        ("Wound Care", "Stage 2 pressure ulcer sacrum, dressing changes daily"),
+        ("Wound Care", "Surgical wound, staples intact, remove {}"),
+        ("HIV/Hepatitis", "Hepatitis C positive, standard precautions"),
+        ("Fractures", "Left hip fracture s/p ORIF, weight-bearing as tolerated"),
+        ("Rehab Services", "PT/OT 5x week"),
+        ("Pain Management", "Oxycodone 5mg q4-6h PRN, rates pain 6/10"),
+        ("Ostomy", "Colostomy, patient managing independently"),
+        ("Elopement Risk", "History of wandering, bed alarm in place"),
+        ("Continuous O2", "2L NC continuous, baseline SpO2 88-92%"),
+        ("Fall Risk", "Morse Fall Scale 65 - High risk, fall precautions"),
+        ("CPAP", "BiPAP nightly for sleep apnea, good compliance")
+    ]
+
+    yellow_flags = [
+        ("Peritoneal Dialysis", "CAPD 4 exchanges daily"),
+        ("Psychiatric Diagnosis", "Major depressive disorder, stable on Sertraline"),
+        ("Psychiatric Diagnosis", "Bipolar disorder, currently euthymic"),
+        ("Substance Use History", "Alcohol use disorder, sober 6 months"),
+        ("Tracheostomy", "Trach placed {}, requires suctioning q4h"),
+        ("TPN", "Central line TPN, cycled overnight"),
+        ("Chemotherapy", "Last cycle {}, due for next {}"),
+        ("Enteral Feeding", "PEG tube, Jevity 1.5 at 75mL/hr"),
+        ("Bariatric", "Weight 385 lbs, bariatric bed/equipment required"),
+        ("Paraplegia", "T8 paraplegia, wheelchair dependent"),
+        ("Infectious Disease", "MRSA colonization, contact precautions"),
+        ("PCA Pump", "Dilaudid PCA for post-op pain management"),
+        ("1:1 Supervision", "Required for safety, aggressive behaviors")
+    ]
+
+    red_flags = [
+        ("Heparin Drip", "For DVT, PTT monitoring q6h"),
+        ("Insulin Drip", "DKA protocol, glucose checks q1h"),
+        ("Ventilator", "Vent-dependent, wean in progress"),
+        ("Telemetry", "Continuous cardiac monitoring for arrhythmias"),
+        ("Danger to Others", "History of assaultive behavior, 1:1 required")
+    ]
+
+    # Randomly select 2-4 green flags
+    num_green = random.randint(2, 4)
+    for flag_data in random.sample(green_flags, min(num_green, len(green_flags))):
+        flags["green"].append(flag_data)
+
+    # Randomly select 0-2 yellow flags
+    if random.random() > 0.4:
+        num_yellow = random.randint(1, 2)
+        for flag_data in random.sample(yellow_flags, min(num_yellow, len(yellow_flags))):
+            flags["yellow"].append(flag_data)
+
+    # Rarely add red flags (0-1)
+    if random.random() > 0.85:
+        flag_data = random.choice(red_flags)
+        flags["red"].append(flag_data)
+
+    return flags
+
+def get_dme_equipment():
+    """Generate DME and equipment needs"""
+    equipment = []
+    base_items = random.sample([
+        "Hospital bed with pressure-relieving mattress",
+        "Bedside commode",
+        "Raised toilet seat with grab bars",
+        "Shower chair with back support",
+        "Rolling walker with seat",
+        "Standard walker",
+        "Quad cane",
+        "Wheelchair - manual, standard",
+        "Oxygen concentrator - 2L continuous"
+    ], k=random.randint(2, 4))
+    return base_items
+
+def generate_admission_document(filename=None, output_dir="/Users/caseykimball/Documents/sample_docs"):
     """Generate a complete admission document PDF with randomized data"""
 
     # Generate random patient data
@@ -209,6 +288,8 @@ def generate_admission_document(filename=None):
     diagnosis = get_random_diagnosis()
     medications = get_random_medications()
     allergies = get_random_allergies()
+    clinical_flags = get_clinical_flags()
+    dme_equipment = get_dme_equipment()
 
     # Generate vital signs
     systolic = random.randint(135, 170)
@@ -247,18 +328,56 @@ def generate_admission_document(filename=None):
     floor = random.choice(["2A", "2B", "3A", "3B", "4A", "4B"])
     room = random.randint(201, 499)
 
-    hospital_name = f"{fake.last_name().upper()} MEDICAL CENTER"
+    # Realistic US-based hospital names (California and Colorado focus)
+    hospital_names = [
+        "Hoag Hospital",
+        "UCLA Medical Center",
+        "Stanford Hospital",
+        "UCSF Medical Center",
+        "Cedars-Sinai Medical Center",
+        "Scripps Memorial Hospital",
+        "Sharp Memorial Hospital",
+        "Sutter Health",
+        "Kaiser Permanente",
+        "Providence St. Joseph Hospital",
+        "Huntington Hospital",
+        "City of Hope",
+        "Children's Hospital Los Angeles",
+        "Keck Hospital of USC",
+        "UC Irvine Medical Center",
+        "UC San Diego Health",
+        "Cottage Hospital",
+        "Dignity Health",
+        "UCHealth University of Colorado Hospital",
+        "Denver Health Medical Center",
+        "Presbyterian/St. Luke's Medical Center",
+        "Porter Adventist Hospital",
+        "Swedish Medical Center",
+        "Sky Ridge Medical Center",
+        "Exempla Good Samaritan Medical Center"
+    ]
+
+    hospital_name = random.choice(hospital_names)
+    # Extract short name for filename (first word or two before separator)
+    hospital_short = hospital_name.split()[0]
 
     # Generate filename if not provided
     if filename is None:
-        # Format: LASTNAME_FIRSTNAME_MMDDYYYY.pdf
-        safe_name = f"{last_name}_{first_name}_{datetime.now().strftime('%m%d%Y')}.pdf"
+        # Format: HOSPITALNAME-LASTNAME,FIRSTNAME.pdf
+        safe_name = f"{hospital_short}-{last_name},{first_name}.pdf"
         # Remove any characters that might cause issues in filenames
-        safe_name = safe_name.replace(" ", "_").replace(",", "")
+        safe_name = safe_name.replace(" ", "_")
         filename = safe_name
 
+    # Ensure output directory exists
+    import os
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Construct full output path
+    full_output_path = os.path.join(output_dir, filename)
+
     # Create PDF document
-    doc = SimpleDocTemplate(filename, pagesize=letter,
+    doc = SimpleDocTemplate(full_output_path, pagesize=letter,
                            rightMargin=0.75*inch, leftMargin=0.75*inch,
                            topMargin=0.75*inch, bottomMargin=0.75*inch)
 
@@ -333,7 +452,7 @@ def generate_admission_document(filename=None):
     demo_data = [
         ["Patient Name:", full_name, "Date of Birth:", f"{dob_str} ({age} years)"],
         ["Medical Record #:", mrn, "Gender:", "Male" if gender == "M" else "Female"],
-        ["Admission Date:", get_relative_date(0), "Admission Time:", datetime.now().strftime("%H:%M")],
+        ["Admission Date:", get_relative_date(7), "Admission Time:", datetime.now().strftime("%H:%M")],
         ["Primary Insurance:", primary_ins, "Secondary Insurance:", secondary_ins],
         ["Social Security #:", ssn, "Marital Status:", random.choice(["Married", "Single", "Widowed", "Divorced"])]
     ]
@@ -614,20 +733,147 @@ def generate_admission_document(filename=None):
     elements.append(Spacer(1, 0.15*inch))
 
     # FUNCTIONAL STATUS
-    elements.append(Paragraph("FUNCTIONAL STATUS", section_style))
-    functional = f"""• <b>Baseline ADLs:</b> {random.choice(["Independent with all activities of daily living", "Requires assistance with bathing and dressing", "Independent with minimal assistance"])}<br/>
-    • <b>Mobility:</b> {random.choice(["Ambulates independently without assistive device", "Uses walker for ambulation", "Uses cane for ambulation", "Wheelchair dependent"])}<br/>
-    • <b>Cognition:</b> {random.choice(["Alert and oriented, manages own medications and finances", "Mild cognitive impairment", "Early dementia, requires assistance with complex tasks"])}<br/>
-    • <b>Exercise Tolerance:</b> {random.choice(["Good baseline", "Decreased over past months", "Limited due to shortness of breath", "Sedentary lifestyle"])}"""
+    elements.append(Paragraph("FUNCTIONAL STATUS & COGNITIVE ASSESSMENT", section_style))
+
+    baseline_adl = random.choice(["Independent with all activities of daily living", "Requires assistance with bathing and dressing", "Independent with minimal assistance", "Requires extensive assistance with ADLs"])
+    mobility_status = random.choice(["Ambulates independently without assistive device", "Uses walker for ambulation", "Uses cane for ambulation", "Wheelchair dependent", "Bedbound, requires 2-person assist for transfers"])
+    cognition_status = random.choice(["Alert and oriented x4, manages own medications and finances", "Mild cognitive impairment, BIMS score 11", "Moderate impairment, requires cues for ADLs, BIMS score 8", "Early dementia, requires assistance with complex tasks"])
+
+    functional = f"""• <b>Prior Level of Function:</b> {baseline_adl}<br/>
+    • <b>Current Mobility:</b> {mobility_status}<br/>
+    • <b>Cognitive Status:</b> {cognition_status}<br/>
+    • <b>Exercise Tolerance:</b> {random.choice(["Good baseline", "Decreased over past months", "Limited due to shortness of breath", "Sedentary lifestyle"])}<br/>
+    • <b>Communication:</b> {random.choice(["Clear verbal communication", "Hearing impaired - uses hearing aids", "Expressive aphasia noted", "Requires communication board"])}"""
     elements.append(Paragraph(functional, normal_style))
-    elements.append(Spacer(1, 0.3*inch))
+    elements.append(Spacer(1, 0.15*inch))
+
+    # SECTION GG FUNCTIONAL ASSESSMENT
+    if random.random() > 0.5:
+        elements.append(Paragraph("<b>Section GG Functional Assessment (Admission Performance):</b>", subsection_style))
+        gg_score_eating = random.choice(["06 - Independent", "05 - Setup/cleanup assistance", "04 - Supervision", "03 - Partial/moderate assistance"])
+        gg_score_toileting = random.choice(["04 - Supervision", "03 - Partial/moderate assistance", "02 - Substantial/maximal assistance"])
+        gg_score_transfer = random.choice(["03 - Partial/moderate assistance", "02 - Substantial/maximal assistance", "01 - Dependent"])
+        gg_score_walking = random.choice(["04 - Supervision", "03 - Partial/moderate assistance", "02 - Substantial/maximal assistance", "01 - Dependent"])
+
+        gg_assessment = f"""GG0130 Self-Care: Eating ({gg_score_eating}), Toileting hygiene ({gg_score_toileting})<br/>
+        GG0170 Mobility: Bed-to-chair transfer ({gg_score_transfer}), Walking 10 feet ({gg_score_walking})<br/>
+        <i>Note: Patient requires assist with lower body dressing due to hip precautions</i>"""
+        elements.append(Paragraph(gg_assessment, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    # PAGE BREAK
+    elements.append(PageBreak())
+
+    # THERAPY SERVICES & REHABILITATION NEEDS
+    therapy_services = []
+    if random.random() > 0.5:
+        pt_freq = random.choice(["5x/week", "6x/week"])
+        therapy_services.append(f"PT {pt_freq} - {random.choice(['Gait training', 'Transfer training', 'Strengthening'])}, using {random.choice(['walker', 'cane'])} with {random.choice(['supervision', 'minimal assist'])}")
+
+    if random.random() > 0.6:
+        ot_freq = random.choice(["3x/week", "5x/week"])
+        therapy_services.append(f"OT {ot_freq} - ADL training, {random.choice(['dressing', 'bathing', 'grooming'])}")
+
+    if random.random() > 0.7:
+        therapy_services.append(f"ST 3x/week - {random.choice(['Dysphagia management, nectar-thick liquids', 'Cognitive therapy', 'Aphasia therapy'])}")
+
+    if therapy_services:
+        elements.append(Paragraph("THERAPY SERVICES", section_style))
+        therapy_text = "<br/>".join([f"• {service}" for service in therapy_services])
+        elements.append(Paragraph(therapy_text, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    # CLINICAL FLAGS & SPECIAL CARE NEEDS
+    has_flags = clinical_flags["green"] or clinical_flags["yellow"] or clinical_flags["red"]
+    if has_flags:
+        elements.append(Paragraph("CLINICAL FLAGS & SPECIAL CARE REQUIREMENTS", section_style))
+
+        # Red flags (highest priority)
+        if clinical_flags["red"]:
+            for flag_name, flag_detail in clinical_flags["red"]:
+                detail = flag_detail.format(get_relative_date(-5)) if '{}' in flag_detail else flag_detail
+                elements.append(Paragraph(f"<b>🔴 {flag_name}:</b> {detail}", normal_style))
+
+        # Yellow flags (moderate priority)
+        if clinical_flags["yellow"]:
+            for flag_name, flag_detail in clinical_flags["yellow"]:
+                detail = flag_detail.format(get_relative_date(random.randint(-10, -3)), get_relative_date(random.randint(8, 15))) if flag_detail.count('{}') == 2 else (flag_detail.format(get_relative_date(-5)) if '{}' in flag_detail else flag_detail)
+                elements.append(Paragraph(f"<b>🟡 {flag_name}:</b> {detail}", normal_style))
+
+        # Green flags (routine monitoring)
+        if clinical_flags["green"]:
+            for flag_name, flag_detail in clinical_flags["green"]:
+                detail = flag_detail.format(get_relative_date(random.randint(8, 14))) if '{}' in flag_detail else flag_detail
+                elements.append(Paragraph(f"<b>🟢 {flag_name}:</b> {detail}", normal_style))
+
+        elements.append(Spacer(1, 0.15*inch))
+
+    # DME & EQUIPMENT NEEDS
+    if dme_equipment:
+        elements.append(Paragraph("EQUIPMENT NEEDS", section_style))
+        dme_text = "<br/>".join([f"• {item}" for item in dme_equipment[:3]])  # Limit to 3 items
+        elements.append(Paragraph(dme_text, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    # TRANSFER GUIDELINES & CARE NEEDS
+    elements.append(Paragraph("TRANSFER GUIDELINES & SPECIAL CARE NEEDS", section_style))
+    transfer_toileting = random.choice(["Independent with bedside commode", "Requires 1-person assist to commode", "Requires 2-person assist, uses mechanical lift", "Uses brief, incontinent of bowel/bladder"])
+    transfer_bathing = random.choice(["Shower with supervision", "Bed bath, requires assistance", "Shower chair with 1-person assist", "Mechanical lift required"])
+
+    transfer_text = f"""• <b>Toileting:</b> {transfer_toileting}<br/>
+    • <b>Bathing:</b> {transfer_bathing}<br/>
+    • <b>Bed Mobility:</b> {random.choice(['Independent', 'Requires 1-person assist for repositioning', 'Requires 2-person assist, turn q2h for pressure relief'])}<br/>
+    • <b>Transfers:</b> {random.choice(['Modified independent with walker', 'Stand-pivot transfer with 1-person assist', '2-person assist or mechanical lift required'])}<br/>
+    • <b>Nutrition:</b> {random.choice(['Regular diet, self-feeds', 'Mechanical soft, nectar-thick liquids', 'Pureed diet, supervision required', 'PEG tube feeds - Jevity 1.5 at 75mL/hr'])}"""
+    elements.append(Paragraph(transfer_text, normal_style))
+    elements.append(Spacer(1, 0.15*inch))
+
+    # RECENT IMMUNIZATIONS
+    if random.random() > 0.5:
+        elements.append(Paragraph("RECENT IMMUNIZATIONS", section_style))
+        immunization_date1 = get_relative_date(random.randint(-90, -30))
+        imm_text = f"""• Influenza - {immunization_date1}<br/>
+        • Pneumococcal (PPSV23) - {get_relative_date(random.randint(-180, -91))}"""
+        if random.random() > 0.5:
+            covid_date = get_relative_date(random.randint(-120, -60))
+            imm_text += f"<br/>• COVID-19 Booster - {covid_date}"
+        elements.append(Paragraph(imm_text, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    # UPCOMING APPOINTMENTS & FOLLOW-UP
+    if random.random() > 0.3:
+        elements.append(Paragraph("FOLLOW-UP APPOINTMENTS", section_style))
+        appt_date1 = get_relative_date(random.randint(8, 14))
+        appt_date2 = get_relative_date(random.randint(15, 25))
+
+        specialties = ["Cardiology", "Orthopedics", "Neurology", "Wound Care", "Primary Care"]
+        selected_specialties = random.sample(specialties, k=2)
+
+        appointments = f"""• {selected_specialties[0]} - {appt_date1} at {random.choice(['9:00 AM', '10:30 AM', '2:00 PM'])}<br/>
+        • {selected_specialties[1]} - {appt_date2} at {random.choice(['9:30 AM', '11:00 AM', '2:30 PM'])}"""
+        if random.random() > 0.6:
+            appointments += f"<br/>• Lab work (CBC, BMP) - Due {get_relative_date(random.randint(6, 10))}"
+
+        elements.append(Paragraph(appointments, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    # NUTRITIONAL STATUS (simplified, sometimes included)
+    if random.random() > 0.6:
+        elements.append(Paragraph("NUTRITION", section_style))
+        meal_intake = random.choice(["75%", "60%", "50%"])
+        nutrition = f"""• Diet: {random.choice(['Regular', 'Cardiac', 'Diabetic', 'Mechanical soft'])} - Intake {meal_intake}%<br/>
+        • {random.choice([f'Weight stable', f'5% weight loss past 30 days', 'Supplements: Ensure BID'])}"""
+        elements.append(Paragraph(nutrition, normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
+    elements.append(Spacer(1, 0.2*inch))
 
     # SIGNATURE
     elements.append(Paragraph("_" * 50, normal_style))
     attending_npi = generate_npi()
     signature = f"""<b>{attending_dr}, FACC</b><br/>
     Attending Physician<br/>
-    Date: {get_relative_date(0)} | Time: {datetime.now().strftime("%H:%M")}<br/>
+    Date: {get_relative_date(7)} | Time: {datetime.now().strftime("%H:%M")}<br/>
     NPI: {attending_npi}"""
     elements.append(Paragraph(signature, normal_style))
     elements.append(Spacer(1, 0.2*inch))
@@ -642,11 +888,11 @@ def generate_admission_document(filename=None):
 
     # Build PDF
     doc.build(elements)
-    print(f"✓ PDF generated successfully: {filename}")
+    print(f"✓ PDF generated successfully: {full_output_path}")
     print(f"  Patient: {full_name}")
     print(f"  MRN: {mrn}")
     print(f"  SSN: {ssn}")
-    return filename
+    return full_output_path
 
 
 if __name__ == "__main__":

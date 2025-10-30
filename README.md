@@ -1,34 +1,44 @@
 # 🏥 Conduit Sample Data Generator
 
-Generate professional medical admission documents with realistic sample data for testing healthcare software systems.
+Generate professional medical documents with realistic sample data for testing healthcare admissions software systems.
+
+## 📚 What This Generates
+
+This tool creates **two types** of realistic medical documents:
+
+### 1️⃣ **Hospital Admission Documents**
+Comprehensive patient admission assessments from major hospitals (UCLA, Stanford, Hoag, etc.)
+
+### 2️⃣ **Medication Orders**
+Patient medication lists from physician offices and pharmacies
 
 ---
 
 ## 📋 Prerequisites
 
-Before you begin, you'll need Python installed on your system.
+Before you begin, you'll need **Python 3.8 or higher** installed on your system.
 
-### Check if Python is Already Installed
+### ✅ Check if Python is Already Installed
 
-Open your terminal and run:
+Open your terminal/command prompt and run:
 
-```bash
-python --version
-```
-
-or
-
+**macOS/Linux:**
 ```bash
 python3 --version
 ```
 
-If you see a version number (3.8 or higher), you're good to go! Skip to [Setup](#-setup).
+**Windows:**
+```bash
+python --version
+```
+
+If you see a version number (3.8 or higher), skip to [Setup](#-setup).
 
 ---
 
 ## 🐍 Installing Python
 
-### macOS
+### 🍎 macOS
 
 **Option 1: Using Homebrew (Recommended)**
 
@@ -46,14 +56,16 @@ brew install python
 2. Download the latest Python 3.x installer for macOS
 3. Run the installer and follow the prompts
 
-### Windows
+---
+
+### 🪟 Windows
 
 **Option 1: Download from Python.org (Recommended)**
 
 1. Visit [python.org/downloads](https://www.python.org/downloads/)
 2. Download the latest Python 3.x installer for Windows
 3. Run the installer
-4. ⚠️ **Important:** Check "Add Python to PATH" during installation
+4. ⚠️ **IMPORTANT:** Check ✅ "Add Python to PATH" during installation
 5. Click "Install Now"
 
 **Option 2: Using Microsoft Store**
@@ -62,15 +74,17 @@ brew install python
 2. Search for "Python 3.12" (or latest version)
 3. Click "Get" to install
 
-### Linux (Ubuntu/Debian)
+---
 
+### 🐧 Linux
+
+**Ubuntu/Debian:**
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv
 ```
 
-### Linux (Fedora/RHEL)
-
+**Fedora/RHEL:**
 ```bash
 sudo dnf install python3 python3-pip
 ```
@@ -79,31 +93,33 @@ sudo dnf install python3 python3-pip
 
 ## 🚀 Setup
 
-### 1️⃣ Clone or Download This Repository
+### 1️⃣ Navigate to Project Directory
 
+Open your terminal/command prompt and navigate to this folder:
+
+**macOS/Linux:**
 ```bash
-cd /path/to/your/projects
-git clone <repository-url>
-cd conduit-sample-data-generator
+cd /Users/caseykimball/Documents/Conduit/dev/conduit-sample-data-generator
 ```
 
-Or download and extract the ZIP file, then navigate to the folder.
+**Windows:**
+```cmd
+cd C:\path\to\conduit-sample-data-generator
+```
 
 ---
 
 ### 2️⃣ Create a Virtual Environment
 
-A virtual environment keeps your project dependencies isolated from other Python projects.
+A virtual environment keeps project dependencies isolated.
 
 **macOS/Linux:**
-
 ```bash
 python3 -m venv venv
 ```
 
 **Windows:**
-
-```bash
+```cmd
 python -m venv venv
 ```
 
@@ -112,106 +128,164 @@ python -m venv venv
 ### 3️⃣ Activate the Virtual Environment
 
 **macOS/Linux:**
-
 ```bash
 source venv/bin/activate
 ```
 
 **Windows (Command Prompt):**
-
 ```cmd
 venv\Scripts\activate.bat
 ```
 
 **Windows (PowerShell):**
-
 ```powershell
 venv\Scripts\Activate.ps1
 ```
 
-> 💡 **Note:** If you get a PowerShell execution policy error, run:
+> 💡 **PowerShell Error?** If you get an execution policy error, run:
 > ```powershell
 > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 > ```
 
-You should see `(venv)` appear at the beginning of your terminal prompt, indicating the virtual environment is active.
+✅ You should see `(venv)` at the beginning of your terminal prompt.
 
 ---
 
 ### 4️⃣ Install Dependencies
 
-With your virtual environment activated, install the required packages:
+With your virtual environment activated:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This will install:
-- `reportlab` - Professional PDF generation library
+This installs:
+- 📄 `reportlab` - Professional PDF generation
+- 🎲 `faker` - Realistic fake data generation
 
 ---
 
-## 🎯 Running the Generator
+## 🎯 Running the Generators
 
-### Generate an Admission Document
+### 🏥 Generate Hospital Admission Documents
 
 ```bash
 python generate_admission_documents.py
 ```
 
 **Output:**
-- ✅ Creates `Admission_Document_Sample.pdf` in the current directory
-- 📄 Professional 2-3 page medical admission document
-- 👤 Realistic patient data with cardiac admission scenario
+- 📁 Saves to: `/Users/caseykimball/Documents/sample_docs/`
+- 📄 Filename: `{Hospital}-{LastName},{FirstName}.pdf`
+- 📝 Example: `Hoag-Smith,John.pdf`
+
+**What's Included:**
+- ✅ Patient demographics (name, DOB, MRN, SSN)
+- ✅ Admission information & chief complaint
+- ✅ Vital signs, diagnoses, allergies, medications
+- ✅ Lab results & diagnostic studies
+- ✅ **Clinical flags** (🔴 red, 🟡 yellow, 🟢 green)
+- ✅ **Functional assessment** (Section GG scores, BIMS scores)
+- ✅ **Therapy services** (PT, OT, ST)
+- ✅ **Equipment needs** (DME)
+- ✅ **Transfer guidelines** (toileting, bathing, mobility)
+- ✅ Immunizations, follow-up appointments
+- ✅ Social history, advance directives
+
+**🗓️ Dates:** Admission date is **7 days in the future** from today
 
 ---
 
-## 📄 What's Generated
+### 💊 Generate Medication Orders
 
-Each run generates a **completely unique** admission document with fully randomized data:
+```bash
+python generate_medication_orders.py
+```
 
-### 🎲 Randomized Personal Information
-- **Patient Demographics** - Random names (male/female), ages (55-90), DOBs
-- **Full SSN** - Complete 9-digit Social Security Number (XXX-XX-XXXX format)
-- **Medical Record Number** - Unique MRN for each patient
-- **Insurance** - Random mix of Medicare, Medicaid, and commercial insurance
-- **Hospital Information** - Random hospital names, addresses, phone/fax numbers
-- **Emergency Contacts** - Randomized family members with phone numbers and emails
+**Output:**
+- 📁 Saves to: `/Users/caseykimball/Documents/sample_docs/`
+- 📄 Filename: `{Institution}-new-meds.pdf`
+- 📝 Example: `CVS-new-meds.pdf` or `Newport-new-meds.pdf`
 
-### 🏥 Randomized Medical Data
-- **Admission Information** - Type, source, attending physician, room assignment
-- **Vital Signs** - Randomized BP, HR, temperature, RR, SpO2, pain levels
-- **Diagnoses** - Random primary diagnoses (cardiac, respiratory, neuro, sepsis) with appropriate secondary conditions
-- **Allergies** - 2-4 random allergies with reactions (highlighted in yellow alert box)
-- **Medications** - 4-7 randomized medications appropriate to patient conditions
-- **Laboratory Results** - Randomized CBC, metabolic panel, cardiac markers, lipid panel
-- **Diagnostic Studies** - Varied ECG and chest X-ray findings
-- **Physical Examination** - Randomized physical exam findings
-- **Assessment & Plan** - Initial treatment plan
-- **Code Status** - Random code status (Full Code, DNR, DNR/DNI)
-- **Social & Functional History** - Random living situations, occupations, smoking/alcohol history
+**What's Included:**
+- ✅ Current medications (3-6 maintenance meds)
+- ✅ New medication orders (2-4 new prescriptions)
+- ✅ Discontinued medications (sometimes included)
+- ✅ Prescriber information (name, NPI)
+- ✅ Institution (physician office or pharmacy)
+- ✅ Medication details: dose, instructions, refills
 
-### 📅 Dynamic Dates
-All dates are generated relative to **today's date**, so documents never look stale or outdated.
+**🗓️ Dates:** Current date for new orders
 
-**Every time you run the script, you get a completely different patient with unique data!**
+**🏢 Sources:** Randomly selects from:
+- 👨‍⚕️ Physician offices (Newport Beach Primary Care, Orange County Family Medicine, etc.)
+- 💊 Pharmacies (CVS, Walgreens, Rite Aid, Costco, etc.)
+
+---
+
+## 📂 Output Location
+
+All documents are saved to:
+```
+/Users/caseykimball/Documents/sample_docs/
+```
+
+The directory is created automatically if it doesn't exist.
+
+---
+
+## 🎲 Randomization Features
+
+### Every Document is Unique!
+
+**Admission Documents:**
+- 🏥 25 realistic CA/CO hospitals
+- 👤 Random patient demographics (age 55-90)
+- 🩺 4 diagnosis categories with appropriate conditions
+- 💊 Randomized medication lists
+- 🚩 Clinical flags (green, yellow, red)
+- 🏋️ Therapy needs and functional scores
+- 🛏️ Equipment and transfer requirements
+
+**Medication Orders:**
+- 👨‍⚕️ 12 physician offices + 10 pharmacies
+- 💊 14 current medication options
+- 🆕 13 new medication options
+- ⛔ 6 discontinued medication options
+- 🎲 Random prescriber names with NPIs
 
 ---
 
 ## 🛠️ Customization
 
-To modify the generated documents, edit `generate_admission_documents.py`:
+### Modify Hospital Lists
 
-- **Patient data** - Change demographics, diagnoses, medications
-- **Styling** - Adjust colors, fonts, spacing in the style definitions
-- **Content sections** - Add or remove sections as needed
-- **Date offsets** - Use `get_relative_date()` function for dynamic dates
+Edit `generate_admission_documents.py` around line 251:
+```python
+hospital_names = [
+    "Your Hospital Name",
+    # Add more hospitals...
+]
+```
+
+### Modify Medication Lists
+
+Edit `generate_medication_orders.py`:
+- Line 37: Current medications
+- Line 58: New medications
+- Line 85: Discontinued medications
+
+### Change Output Directory
+
+Both scripts accept an `output_dir` parameter:
+```python
+generate_admission_document(output_dir="/your/custom/path")
+```
 
 ---
 
-## 🧹 Deactivating the Virtual Environment
+## 🧹 When You're Done
 
-When you're done working, deactivate the virtual environment:
+Deactivate the virtual environment:
 
 ```bash
 deactivate
@@ -221,44 +295,107 @@ deactivate
 
 ## 🆘 Troubleshooting
 
-### "Python command not found"
-- Make sure Python is installed and added to your PATH
-- Try using `python3` instead of `python`
+### ❌ "Python command not found"
+- Verify Python is installed: Try `python3` instead of `python`
+- **Windows:** Make sure "Add Python to PATH" was checked during installation
 
-### "pip command not found"
-- Try `python -m pip` or `python3 -m pip` instead
+### ❌ "pip command not found"
+- Try: `python -m pip` or `python3 -m pip`
 
-### "Permission denied" errors on macOS/Linux
-- Don't use `sudo` with pip when in a virtual environment
-- Make sure your virtual environment is activated
+### ❌ "Permission denied" (macOS/Linux)
+- Don't use `sudo` with pip in a virtual environment
+- Ensure virtual environment is activated
 
-### PDF not generating
-- Verify reportlab installed: `pip list | grep reportlab`
-- Check for error messages in the terminal output
+### ❌ PDF not generating
+- Check reportlab is installed: `pip list | grep reportlab`
+- Look for error messages in terminal
 
-### Module import errors
-- Ensure virtual environment is activated (look for `(venv)` in prompt)
-- Reinstall dependencies: `pip install -r requirements.txt`
+### ❌ Module import errors
+- Make sure `(venv)` appears in your terminal prompt
+- Reinstall: `pip install -r requirements.txt`
+
+### ❌ PowerShell execution policy error (Windows)
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
 ---
 
-## 📝 Requirements
+## 📦 Dependencies
 
-- Python 3.8 or higher
-- reportlab 4.0.7
-- Faker 24.0.0
+```
+reportlab>=4.0.7
+faker>=24.0.0
+```
+
+Automatically installed via `requirements.txt`
+
+---
+
+## 🏥 Sample Hospital Names
+
+**Admission Documents Use:**
+- Hoag Hospital
+- UCLA Medical Center
+- Stanford Hospital
+- UCSF Medical Center
+- Cedars-Sinai Medical Center
+- UCHealth University of Colorado Hospital
+- Denver Health Medical Center
+- And 18 more...
+
+**Medication Orders Use:**
+- Newport Beach Primary Care
+- Orange County Family Medicine
+- CVS Pharmacy #4529
+- Walgreens Pharmacy #8721
+- And 18 more...
+
+---
+
+## 🔒 Privacy & Compliance
+
+✅ **100% Fictitious Data** - All patient information is computer-generated
+✅ **HIPAA Compliant** - No real patient data is used
+✅ **Safe for Testing** - Perfect for development and QA environments
 
 ---
 
 ## 📧 Support
 
-For issues or questions, please contact the development team or open an issue in the repository.
+For questions or issues, contact the Conduit development team.
 
 ---
 
 ## 📜 License
 
-This project is for internal testing purposes only. Contains no real patient data (HIPAA compliant - all data is fictitious).
+This project is for internal testing purposes only. All data is fictitious and generated for software testing.
+
+---
+
+## 🎉 Quick Start Summary
+
+```bash
+# 1. Navigate to folder
+cd /path/to/conduit-sample-data-generator
+
+# 2. Create virtual environment
+python3 -m venv venv
+
+# 3. Activate it
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate     # Windows
+
+# 4. Install dependencies
+pip install -r requirements.txt
+
+# 5. Generate documents!
+python generate_admission_documents.py
+python generate_medication_orders.py
+
+# 6. Find your PDFs in:
+# /Users/caseykimball/Documents/sample_docs/
+```
 
 ---
 
