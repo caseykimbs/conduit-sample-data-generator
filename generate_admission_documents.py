@@ -338,13 +338,15 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
         "Scripps Memorial Hospital",
         "Sharp Memorial Hospital",
         "Sutter Health",
+        "Temecula Valley Hospital",
+        "Montclair Hospital Medical Center",
+        "Centinela Hospital Medical Center",
         "Kaiser Permanente",
-        "Providence St. Joseph Hospital",
+        "Providence Mission Hospital",
         "Huntington Hospital",
-        "City of Hope",
         "Children's Hospital Los Angeles",
-        "Keck Hospital of USC",
         "UC Irvine Medical Center",
+        "Riverside Community Hospital",
         "UC San Diego Health",
         "Cottage Hospital",
         "Dignity Health",
@@ -352,9 +354,6 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
         "Denver Health Medical Center",
         "Presbyterian/St. Luke's Medical Center",
         "Porter Adventist Hospital",
-        "Swedish Medical Center",
-        "Sky Ridge Medical Center",
-        "Exempla Good Samaritan Medical Center"
     ]
 
     hospital_name = random.choice(hospital_names)
