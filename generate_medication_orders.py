@@ -131,13 +131,10 @@ def generate_medication_orders(filename=None, output_dir="/Users/caseykimball/Do
         institution = random.choice(pharmacies)
 
     # Generate dates
-    current_meds_date = get_relative_date(random.randint(-90, -30))
     new_meds_date = get_relative_date(0)  # Today
 
-    # Generate medications
-    current_medications = get_current_medications()
+    # Generate medications - only new medications
     new_medications = get_new_medications()
-    discontinued_medications = get_discontinued_medications()
 
     # Generate filename if not provided
     if filename is None:
@@ -205,20 +202,7 @@ def generate_medication_orders(filename=None, output_dir="/Users/caseykimball/Do
     # HEADER
     elements.append(Paragraph("PATIENT MEDICATION ORDERS", title_style))
     elements.append(Paragraph(institution, institution_style))
-    elements.append(Paragraph(f"<i>Generated: {datetime.now().strftime('%m/%d/%Y %H:%M')}</i>", small_style))
     elements.append(Spacer(1, 0.3*inch))
-
-    # CURRENT MEDICATIONS
-    elements.append(Paragraph("CURRENT MEDICATIONS:", section_style))
-
-    for idx, (med_name, dose, form, instructions, indication, refills) in enumerate(current_medications, 1):
-        med_text = f"""<b>{idx}. {med_name} {dose} {form}</b><br/>
-        {instructions} for {indication}<br/>
-        <i>Prescribed: {current_meds_date} | Refills: {refills}</i>"""
-        elements.append(Paragraph(med_text, normal_style))
-        elements.append(Spacer(1, 0.1*inch))
-
-    elements.append(Spacer(1, 0.2*inch))
 
     # NEW MEDICATION ORDERS
     elements.append(Paragraph("NEW MEDICATION ORDERS:", section_style))
@@ -229,18 +213,6 @@ def generate_medication_orders(filename=None, output_dir="/Users/caseykimball/Do
         <i>Prescribed: {new_meds_date} | Refills: {refills}</i>"""
         elements.append(Paragraph(med_text, normal_style))
         elements.append(Spacer(1, 0.1*inch))
-
-    # DISCONTINUED MEDICATIONS (if any)
-    if discontinued_medications:
-        elements.append(Spacer(1, 0.2*inch))
-        elements.append(Paragraph("DISCONTINUED MEDICATIONS:", section_style))
-
-        for idx, (med_name, dose, form, reason) in enumerate(discontinued_medications, 1):
-            disc_text = f"""<b>{idx}. {med_name} {dose} {form}</b><br/>
-            Discontinued on: {new_meds_date}<br/>
-            <i>Reason: {reason}</i>"""
-            elements.append(Paragraph(disc_text, normal_style))
-            elements.append(Spacer(1, 0.1*inch))
 
     elements.append(Spacer(1, 0.3*inch))
 
@@ -267,9 +239,7 @@ def generate_medication_orders(filename=None, output_dir="/Users/caseykimball/Do
     print(f"✓ Medication Orders PDF generated: {full_output_path}")
     print(f"  Prescriber: {physician_name}")
     print(f"  Institution: {institution}")
-    print(f"  Current Medications: {len(current_medications)}")
     print(f"  New Orders: {len(new_medications)}")
-    print(f"  Discontinued: {len(discontinued_medications)}")
     return full_output_path
 
 
