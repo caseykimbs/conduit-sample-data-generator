@@ -106,40 +106,13 @@ def get_random_diagnosis():
     return random.choice(list(diagnoses.values()))
 
 def get_random_medications():
-    """Generate random but realistic medication list"""
-    med_pools = {
-        "cardiac": [
-            ("Metoprolol", "50 mg", "PO", "BID"),
-            ("Lisinopril", "20 mg", "PO", "Daily"),
-            ("Atorvastatin", "40 mg", "PO", "QHS"),
-            ("Apixaban (Eliquis)", "5 mg", "PO", "BID"),
-            ("Clopidogrel (Plavix)", "75 mg", "PO", "Daily"),
-        ],
-        "diabetes": [
-            ("Metformin", "1000 mg", "PO", "BID"),
-            ("Glipizide", "10 mg", "PO", "Daily"),
-            ("Insulin glargine", "20 units", "SubQ", "QHS"),
-        ],
-        "respiratory": [
-            ("Albuterol inhaler", "2 puffs", "Inhaled", "Q4-6H PRN"),
-            ("Fluticasone/Salmeterol", "250/50 mcg", "Inhaled", "BID"),
-        ],
-        "common": [
-            ("Gabapentin", "300 mg", "PO", "TID"),
-            ("Omeprazole", "20 mg", "PO", "Daily"),
-            ("Aspirin", "81 mg", "PO", "Daily"),
-            ("Vitamin D3", "2000 IU", "PO", "Daily"),
-        ]
-    }
-
-    # Select 4-7 random medications
-    all_meds = []
-    all_meds.extend(random.sample(med_pools["cardiac"], k=random.randint(1, 2)))
-    all_meds.extend(random.sample(med_pools["diabetes"], k=random.randint(0, 2)))
-    all_meds.extend(random.sample(med_pools["respiratory"], k=random.randint(0, 1)))
-    all_meds.extend(random.sample(med_pools["common"], k=random.randint(1, 3)))
-
-    return all_meds[:random.randint(4, 7)]
+    """Generate fixed medication list"""
+    return [
+        ("Lisinopril", "20 mg", "PO", "Daily"),
+        ("Metoprolol succinate", "50 mg", "PO", "Daily"),
+        ("Furosemide", "40 mg", "PO", "Daily"),
+        ("Atorvastatin", "40 mg", "PO", "Daily")
+    ]
 
 def get_random_allergies():
     """Generate random allergies"""
