@@ -28,6 +28,10 @@ def generate_npi():
     """Generate a random 10-digit NPI"""
     return f"{random.randint(1000000000, 9999999999)}"
 
+def generate_encounter_id():
+    """Generate a random encounter/stay ID"""
+    return f"{random.randint(1000000, 9999999)}"
+
 def get_relative_date(days_offset):
     """Generate relative date descriptions with actual date"""
     target_date = datetime.now() + timedelta(days=days_offset)
@@ -322,7 +326,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     floor = random.choice(["2A", "2B", "3A", "3B", "4A", "4B"])
     room = random.randint(201, 499)
 
-    # Real Los Angeles and Orange County hospitals with accurate addresses
+    # Real Los Angeles and Orange County hospitals with accurate addresses and NPIs
     hospitals = [
         {
             "name": "Hoag Hospital Newport Beach",
@@ -330,7 +334,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Newport Beach",
             "state": "CA",
             "zip": "92663",
-            "phone": "(949) 764-4624"
+            "phone": "(949) 764-4624",
+            "npi": "1467424370",
+            "county": "Orange"
         },
         {
             "name": "UCLA Medical Center",
@@ -338,7 +344,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90095",
-            "phone": "(310) 825-9111"
+            "phone": "(310) 825-9111",
+            "npi": "1679576023",
+            "county": "Los Angeles"
         },
         {
             "name": "Cedars-Sinai Medical Center",
@@ -346,7 +354,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90048",
-            "phone": "(310) 423-3277"
+            "phone": "(310) 423-3277",
+            "npi": "1588667638",
+            "county": "Los Angeles"
         },
         {
             "name": "USC Keck Hospital",
@@ -354,7 +364,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90033",
-            "phone": "(323) 442-8500"
+            "phone": "(323) 442-8500",
+            "npi": "1043489089",
+            "county": "Los Angeles"
         },
         {
             "name": "Providence St. Joseph Hospital",
@@ -362,7 +374,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Burbank",
             "state": "CA",
             "zip": "91505",
-            "phone": "(818) 843-5111"
+            "phone": "(818) 843-5111",
+            "npi": "1669440175",
+            "county": "Los Angeles"
         },
         {
             "name": "Huntington Hospital",
@@ -370,7 +384,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Pasadena",
             "state": "CA",
             "zip": "91105",
-            "phone": "(626) 397-5000"
+            "phone": "(626) 397-5000",
+            "npi": "1801818650",
+            "county": "Los Angeles"
         },
         {
             "name": "Children's Hospital Los Angeles",
@@ -378,7 +394,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90027",
-            "phone": "(323) 660-2450"
+            "phone": "(323) 660-2450",
+            "npi": "1942220438",
+            "county": "Los Angeles"
         },
         {
             "name": "UC Irvine Medical Center",
@@ -386,7 +404,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Orange",
             "state": "CA",
             "zip": "92868",
-            "phone": "(714) 456-6011"
+            "phone": "(714) 456-6011",
+            "npi": "1033118630",
+            "county": "Orange"
         },
         {
             "name": "St. Joseph Hospital Orange",
@@ -394,7 +414,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Orange",
             "state": "CA",
             "zip": "92868",
-            "phone": "(714) 633-9111"
+            "phone": "(714) 633-9111",
+            "npi": "1831140646",
+            "county": "Orange"
         },
         {
             "name": "Mission Hospital",
@@ -402,7 +424,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Mission Viejo",
             "state": "CA",
             "zip": "92691",
-            "phone": "(949) 364-1400"
+            "phone": "(949) 364-1400",
+            "npi": "1689607708",
+            "county": "Orange"
         },
         {
             "name": "Saddleback Memorial Medical Center",
@@ -410,7 +434,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Laguna Hills",
             "state": "CA",
             "zip": "92653",
-            "phone": "(949) 837-4500"
+            "phone": "(949) 837-4500",
+            "npi": "1710997114",
+            "county": "Orange"
         },
         {
             "name": "Kaiser Permanente Downey Medical Center",
@@ -418,7 +444,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Downey",
             "state": "CA",
             "zip": "90242",
-            "phone": "(562) 657-9000"
+            "phone": "(562) 657-9000",
+            "npi": "1518987667",
+            "county": "Los Angeles"
         },
         {
             "name": "Long Beach Memorial Medical Center",
@@ -426,7 +454,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Long Beach",
             "state": "CA",
             "zip": "90806",
-            "phone": "(562) 933-2000"
+            "phone": "(562) 933-2000",
+            "npi": "1154383935",
+            "county": "Los Angeles"
         },
         {
             "name": "Torrance Memorial Medical Center",
@@ -434,7 +464,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Torrance",
             "state": "CA",
             "zip": "90505",
-            "phone": "(310) 325-9110"
+            "phone": "(310) 325-9110",
+            "npi": "1114916436",
+            "county": "Los Angeles"
         },
         {
             "name": "Providence Little Company of Mary",
@@ -442,7 +474,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Torrance",
             "state": "CA",
             "zip": "90503",
-            "phone": "(310) 540-7676"
+            "phone": "(310) 540-7676",
+            "npi": "1134173971",
+            "county": "Los Angeles"
         },
         {
             "name": "Anaheim Regional Medical Center",
@@ -450,7 +484,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Anaheim",
             "state": "CA",
             "zip": "92801",
-            "phone": "(714) 774-1450"
+            "phone": "(714) 774-1450",
+            "npi": "1619980624",
+            "county": "Orange"
         },
         {
             "name": "Kaiser Permanente Anaheim Medical Center",
@@ -458,7 +494,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Anaheim",
             "state": "CA",
             "zip": "92806",
-            "phone": "(714) 644-2000"
+            "phone": "(714) 644-2000",
+            "npi": "1891724971",
+            "county": "Orange"
         },
         {
             "name": "West Anaheim Medical Center",
@@ -466,7 +504,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Anaheim",
             "state": "CA",
             "zip": "92804",
-            "phone": "(714) 827-3000"
+            "phone": "(714) 827-3000",
+            "npi": "1730185533",
+            "county": "Orange"
         },
         {
             "name": "Providence Holy Cross Medical Center",
@@ -474,7 +514,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Mission Hills",
             "state": "CA",
             "zip": "91345",
-            "phone": "(818) 365-8051"
+            "phone": "(818) 365-8051",
+            "npi": "1164410868",
+            "county": "Los Angeles"
         },
         {
             "name": "UCLA Santa Monica Medical Center",
@@ -482,7 +524,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Santa Monica",
             "state": "CA",
             "zip": "90404",
-            "phone": "(310) 319-4000"
+            "phone": "(310) 319-4000",
+            "npi": "1487613181",
+            "county": "Los Angeles"
         },
         {
             "name": "Providence Saint John's Health Center",
@@ -490,7 +534,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Santa Monica",
             "state": "CA",
             "zip": "90404",
-            "phone": "(310) 829-5511"
+            "phone": "(310) 829-5511",
+            "npi": "1649298728",
+            "county": "Los Angeles"
         },
         {
             "name": "Ronald Reagan UCLA Medical Center",
@@ -498,7 +544,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90095",
-            "phone": "(310) 825-9111"
+            "phone": "(310) 825-9111",
+            "npi": "1285668043",
+            "county": "Los Angeles"
         },
         {
             "name": "Good Samaritan Hospital",
@@ -506,7 +554,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90017",
-            "phone": "(213) 977-2121"
+            "phone": "(213) 977-2121",
+            "npi": "1144207003",
+            "county": "Los Angeles"
         },
         {
             "name": "Hollywood Presbyterian Medical Center",
@@ -514,7 +564,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90027",
-            "phone": "(213) 413-3000"
+            "phone": "(213) 413-3000",
+            "npi": "1356351253",
+            "county": "Los Angeles"
         },
         {
             "name": "Kaiser Permanente Los Angeles Medical Center",
@@ -522,7 +574,9 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
             "city": "Los Angeles",
             "state": "CA",
             "zip": "90027",
-            "phone": "(323) 783-4011"
+            "phone": "(323) 783-4011",
+            "npi": "1831124806",
+            "county": "Los Angeles"
         }
     ]
 
@@ -533,7 +587,12 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     hospital_state = hospital["state"]
     hospital_zip = hospital["zip"]
     hospital_phone = hospital["phone"]
+    hospital_npi = hospital["npi"]
+    hospital_county = hospital["county"]
     hospital_fax = fake.phone_number()  # Fax numbers can still be generated
+
+    # Generate encounter/stay ID
+    encounter_id = generate_encounter_id()
 
     # Extract short name for filename (first word)
     hospital_short = hospital_name.split()[0]
@@ -615,21 +674,25 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
 
     # HEADER
     elements.append(Paragraph(hospital_name, title_style))
-    elements.append(Paragraph(f"{hospital_address} | {hospital_city}, {hospital_state} {hospital_zip}<br/>Phone: {hospital_phone} | Fax: {hospital_fax}", small_style))
+    elements.append(Paragraph(f"{hospital_address} | {hospital_city}, {hospital_state} {hospital_zip}<br/>Phone: {hospital_phone} | Fax: {hospital_fax}<br/>NPI: {hospital_npi} | County: {hospital_county}", small_style))
     elements.append(Spacer(1, 0.2*inch))
 
     # Title
-    title_text = "PATIENT ADMISSION ASSESSMENT"
-    elements.append(Paragraph(f"<para align=center><b>{title_text}</b></para>", styles['Heading1']))
+    title_text = "Patient H&amp;P"
+    elements.append(Paragraph(f"<para align=center><b>{title_text}</b></para>", styles['Heading2']))
+    elements.append(Spacer(1, 0.1*inch))
+
+    # Encounter ID prominently displayed
+    elements.append(Paragraph(f"<para align=center><b>Encounter ID: {encounter_id}</b> | Date: {get_relative_date(-7)}</para>", normal_style))
     elements.append(Spacer(1, 0.2*inch))
 
-    # PATIENT DEMOGRAPHICS
-    elements.append(Paragraph("PATIENT DEMOGRAPHICS", section_style))
+    # Patient Demographics
+    elements.append(Paragraph("Patient Demographics", section_style))
 
     demo_data = [
         ["Patient Name:", full_name, "Date of Birth:", f"{dob_str} ({age} years)"],
         ["Medical Record #:", mrn, "Gender:", "Male" if gender == "M" else "Female"],
-        ["Admission Date:", get_relative_date(7), "Admission Time:", datetime.now().strftime("%H:%M")],
+        ["Admission Date:", get_relative_date(-7), "Admission Time:", datetime.now().strftime("%H:%M")],
         ["Primary Insurance:", primary_ins, "Secondary Insurance:", secondary_ins],
         ["Social Security #:", ssn, "Marital Status:", random.choice(["Married", "Single", "Widowed", "Divorced"])]
     ]
@@ -646,7 +709,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # ADMISSION INFORMATION
-    elements.append(Paragraph("ADMISSION INFORMATION", section_style))
+    elements.append(Paragraph("Admission Information", section_style))
 
     admission_type = random.choice(["Direct Admission", "Emergency Department", "Transfer from another facility", "Elective Admission"])
     chief_complaint = random.choice([
@@ -676,7 +739,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # DIAGNOSES
-    elements.append(Paragraph("ADMITTING DIAGNOSES", section_style))
+    elements.append(Paragraph("Admitting Diagnoses", section_style))
     elements.append(Paragraph("<b>Primary Diagnosis:</b>", subsection_style))
     elements.append(Paragraph(f"• {diagnosis['primary']}", normal_style))
     elements.append(Spacer(1, 0.1*inch))
@@ -693,7 +756,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # VITAL SIGNS ON ADMISSION
-    elements.append(Paragraph("VITAL SIGNS ON ADMISSION", section_style))
+    elements.append(Paragraph("Vital Signs on Admission", section_style))
 
     vital_data = [
         ["BP", "HR", "Temp (°F)", "RR", "SpO2", "Pain Level"],
@@ -719,8 +782,8 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Paragraph(f"<i>Weight: {weight_lbs} lbs ({weight_kg} kg) | Height: {height_feet}'{height_remaining}\" ({height_cm} cm) | BMI: {bmi}</i>", small_style))
     elements.append(Spacer(1, 0.15*inch))
 
-    # ADMISSION MEDICATIONS
-    elements.append(Paragraph("HOME MEDICATIONS (Patient Report)", section_style))
+    # Home medications
+    elements.append(Paragraph("Home Medications (Patient Report)", section_style))
 
     med_data = [["Medication", "Dose", "Route", "Frequency", "Last Taken"]]
     for med in medications:
@@ -754,7 +817,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(PageBreak())
 
     # ADMISSION LABS
-    elements.append(Paragraph("ADMISSION LABORATORY RESULTS", section_style))
+    elements.append(Paragraph("Admission Laboratory Results", section_style))
     elements.append(Paragraph("<b>Complete Blood Count:</b>", subsection_style))
     elements.append(Paragraph(f"WBC: {wbc} K/µL | Hgb: {hgb} g/dL | Hct: {hct}% | Platelets: {platelets} K/µL", normal_style))
     elements.append(Spacer(1, 0.1*inch))
@@ -782,7 +845,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # DIAGNOSTIC STUDIES
-    elements.append(Paragraph("DIAGNOSTIC STUDIES", section_style))
+    elements.append(Paragraph("Diagnostic Studies", section_style))
 
     elements.append(Paragraph("<b>ECG Findings:</b>", subsection_style))
     ecg_findings = random.choice([
@@ -805,7 +868,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # PHYSICAL EXAMINATION
-    elements.append(Paragraph("ADMISSION PHYSICAL EXAMINATION", section_style))
+    elements.append(Paragraph("Admission Physical Examination", section_style))
 
     elements.append(Paragraph("<b>General:</b> Alert, oriented x4, " + random.choice(["in moderate distress", "in no acute distress", "in mild distress", "appears ill"]), normal_style))
     elements.append(Paragraph("<b>HEENT:</b> Normocephalic, atraumatic, PERRLA, mucous membranes " + random.choice(["moist", "dry"]), normal_style))
@@ -816,8 +879,26 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Paragraph("<b>Neurological:</b> Grossly intact, moving all extremities, " + random.choice(["no focal deficits", "left-sided weakness noted", "right-sided weakness noted"]), normal_style))
     elements.append(Spacer(1, 0.15*inch))
 
+    # Clinical Notes - scatter some info here
+    elements.append(Paragraph("Clinical Notes", section_style))
+    clinical_notes = []
+
+    # Randomly include some scattered clinical observations
+    if random.random() > 0.5:
+        clinical_notes.append(f"Patient arrived via {random.choice(['ambulance', 'private vehicle', 'wheelchair transport'])}. Family member {random.choice(['present and supportive', 'unable to be present', 'at bedside'])}.")
+
+    if random.random() > 0.5:
+        clinical_notes.append(f"Patient reports {random.choice(['good', 'fair', 'poor'])} medication compliance at home. {random.choice(['Has been taking meds as prescribed', 'Admits to missing doses occasionally', 'Difficulty affording medications noted'])}.")
+
+    if random.random() > 0.6:
+        clinical_notes.append(f"Recent hospitalization: {random.choice(['Denies recent hospitalizations', f'Last admitted {get_relative_date(random.randint(-90, -30))} for similar symptoms', f'Multiple recent admissions noted in past 6 months'])}.")
+
+    if len(clinical_notes) > 0:
+        elements.append(Paragraph("<br/>".join(clinical_notes), normal_style))
+        elements.append(Spacer(1, 0.15*inch))
+
     # ASSESSMENT AND PLAN
-    elements.append(Paragraph("ASSESSMENT AND INITIAL PLAN", section_style))
+    elements.append(Paragraph("Assessment and Initial Plan", section_style))
 
     gender_full = "male" if gender == "M" else "female"
     plan = f"""{age}-year-old {gender_full} presenting with {chief_complaint.lower()}. Patient has multiple comorbidities including {', '.join(diagnosis['secondary'][:3]).lower()}. Will admit for close monitoring and medical management.<br/><br/>
@@ -837,7 +918,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # EMERGENCY CONTACTS
-    elements.append(Paragraph("EMERGENCY CONTACTS", section_style))
+    elements.append(Paragraph("Emergency Contacts", section_style))
 
     contact_data = [
         ["Primary Contact:", "Secondary Contact:"],
@@ -869,7 +950,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     elements.append(Spacer(1, 0.15*inch))
 
     # SOCIAL HISTORY
-    elements.append(Paragraph("SOCIAL HISTORY", section_style))
+    elements.append(Paragraph("Social History", section_style))
 
     living_situations = [
         "Lives alone in single-story home",
@@ -955,7 +1036,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
         therapy_services.append(f"ST 3x/week - {random.choice(['Dysphagia management, nectar-thick liquids', 'Cognitive therapy', 'Aphasia therapy'])}")
 
     if therapy_services:
-        elements.append(Paragraph("THERAPY SERVICES", section_style))
+        elements.append(Paragraph("Therapy Services", section_style))
         therapy_text = "<br/>".join([f"• {service}" for service in therapy_services])
         elements.append(Paragraph(therapy_text, normal_style))
         elements.append(Spacer(1, 0.15*inch))
@@ -987,7 +1068,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
 
     # DME & EQUIPMENT NEEDS
     if dme_equipment:
-        elements.append(Paragraph("EQUIPMENT NEEDS", section_style))
+        elements.append(Paragraph("Equipment Needs", section_style))
         dme_text = "<br/>".join([f"• {item}" for item in dme_equipment[:3]])  # Limit to 3 items
         elements.append(Paragraph(dme_text, normal_style))
         elements.append(Spacer(1, 0.15*inch))
@@ -1007,7 +1088,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
 
     # RECENT IMMUNIZATIONS
     if random.random() > 0.5:
-        elements.append(Paragraph("RECENT IMMUNIZATIONS", section_style))
+        elements.append(Paragraph("Recent Immunizations", section_style))
         immunization_date1 = get_relative_date(random.randint(-90, -30))
         imm_text = f"""• Influenza - {immunization_date1}<br/>
         • Pneumococcal (PPSV23) - {get_relative_date(random.randint(-180, -91))}"""
@@ -1050,7 +1131,7 @@ def generate_admission_document(filename=None, output_dir="/Users/caseykimball/D
     attending_npi = generate_npi()
     signature = f"""<b>{attending_dr}, FACC</b><br/>
     Attending Physician<br/>
-    Date: {get_relative_date(7)} | Time: {datetime.now().strftime("%H:%M")}<br/>
+    Date: {get_relative_date(-7)} | Time: {datetime.now().strftime("%H:%M")}<br/>
     NPI: {attending_npi}"""
     elements.append(Paragraph(signature, normal_style))
     elements.append(Spacer(1, 0.2*inch))
